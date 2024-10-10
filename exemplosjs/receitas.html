@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Receitas</title>
+    <!-- Incluir Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Definir estilo da área principal */
+        #pnlCatalogo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body class="bg-warning" onload="preencheCatalogo()">
+
+    <!-- Área principal como container-fluid -->
+    <div class="container-fluid">
+        <h1 class="text-center my-4">Catálogo de Receitas</h1>
+
+        <!-- Div com apresentação no modo flex-wrap para os painéis de receitas -->
+        <div id="pnlCatalogo"></div>
+    </div>
+
+    <!-- Trecho em JavaScript -->
+    <script>
+        // Vetor de receitas com dados JSON
+        const receitas = [
+            {
+                titulo: "Bolo de chocolate",
+                imagem: "boloChocolate.png",
+                preparo: "Bata todos os ingrediente no liquidificador, despeje em uma forma untada e asse em forno médio por 45 minutos.",
+                ingredientes: ["3 ovos", "2 colheres de sopa de manteiga", "2 xícaras de açúcar", "1 xícara de leite", "4 colheres de sopa de chocolate em pó", "3 xícaras de farinha de trigo", "2 colheres de chá de fermento"]
+                
+            },
+            {
+                titulo: "Bolo de aipim",
+                imagem: "boloAipim.png",
+                preparo: "Bata todos os ingrediente até atingir uma massa homogênea, despeje em uma forma untada e asse em forno médio por 40 minutos.",
+                ingredientes: ["1 kg de aipim ralado", "100 g de manteiga", "1 colher de sopa de fermento em pó", "3 ovos", "1 copo grande de açúcar", "100 g de coco relado", "2 colheres de farinha de trigo (opcional)"]
+            },
+            {
+                titulo: "Bolo de cenoura",
+                imagem: "boloCenoura.png",
+                preparo: "Bata todos os ingrediente no liquidificador, despeje em uma forma untada e asse em forno médio por 45 minutos.",
+                ingredientes: ["1 xícara de cenoura picada", "3 ovos", "1 xícaras de açúcar", "1 xícara de óleo", "1 colher de sopa de fermento", "1 e 1/2 xícara de farinha de trigo"]
+            }
+        ];
+
+        // Função para gerar a lista de ingredientes
+        function getListaIngredientes(receita) {
+            // a) Iniciar a lista em uma variável texto com a tag ul
+            let lista = "<ul>";
+
+            // b) Utilizar map e reduce sobre o campo ingredientes para gerar os itens de lista
+            lista += receita.ingredientes.map(ing => `<li>${ing}</li>`).reduce((acc, item) => acc + item, "");
+
+            // c) Finalizar concatenando o fechamento de ul e retornando a lista HTML
+            lista += "</ul>";
+            return lista;
+        }
+
+        // Função para gerar o painel de uma receita
+        function getCard(receita) {
+            // a) Utilizar substituição direta com texto entre crases
+            return `
+                    <div class="card" style="width: 250px;">
+                        <!-- c) Imagem da receita -->
+                        <img src="${receita.imagem}" class="card-img-top" alt="${receita.titulo}">
+                        
+                        <!-- d) Corpo do card -->
+                        <div class="card-body">
+                            <!-- e) Título da receita -->
+                            <h5 class="card-title">${receita.titulo}</h5>
+                            
+                            <!-- f) Lista de ingredientes e preparo -->
+                            <div class="card-text">
+                                ${getListaIngredientes(receita)}
+                                <hr>
+                                <p>${receita.preparo}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        }
+
+        // Função para preencher o catálogo de receitas
+        function preencheCatalogo() {
+            // a) Capturar o elemento pnlCatalogo via getElementById
+            const catalogo = document.getElementById('pnlCatalogo');
+
+            // b) Obter o texto HTML para os painéis de receita formatados com base em getCard
+            const cardsHTML = receitas.map(receita => getCard(receita)).reduce((acc, card) => acc + card, "");
+
+            // c) Alterar o innerHTML de pnlCatalogo para o texto HTML gerado
+            catalogo.innerHTML = cardsHTML;
+        }
+    </script>
+</body>
+
+</html>
